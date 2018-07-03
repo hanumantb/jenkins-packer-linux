@@ -26,7 +26,7 @@ for(int i = 0; i < OS.size(); i++) {
     }
 }
 
-/* def deployJobsBatch1 = [:]
+ def deployJobsBatch1 = [:]
 deployJobsBatch1["Deploy OS 2008R2 to DEN3"] = {
     build job: 'packer-Deploy', parameters: [
         string(name: 'OSVersion', value: "2008R2"),
@@ -76,7 +76,7 @@ deployJobsBatch3["Deploy OS 2016 to DEN2"] = {
     build job: 'packer-Deploy', parameters: [
         string(name: 'OSVersion', value: "2016"),
         string(name: 'DestinationVcenter', value: "DEN2")], wait: true, propagate: false
-} */
+} 
 
 def getLastJobStatus(osVersion, task) {
     lastRun = readJSON file: "${packer_build_directory}/${osVersion}-${task}-LastRun.json"
