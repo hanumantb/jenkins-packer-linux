@@ -1,7 +1,7 @@
 def buildDesc = "Packer - BaseOS \\ ${OSVersion}"
 
 pipeline {
-    agent { label 'packer' }
+    agent { label 'packer-node' }
     environment {
         // Packer directories
         PACKER_BUILD_DIRECTORY = "D:/PackerBuilds/"
