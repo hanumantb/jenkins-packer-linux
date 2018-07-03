@@ -9,7 +9,7 @@ for(int i = 0; i < OS.size(); i++) {
     def index = i
     def osString = OS[index]
     buildOSJobs["Build OS ${OS.getAt(index)}"] = {
-        build job: 'packer-BaseOS', parameters: [
+        build job: 'packer-linux-BaseOS', parameters: [
         string(name: 'OSVersion', value: osString)]
     }
 }
