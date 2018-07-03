@@ -1,0 +1,8 @@
+{
+    "vm_folder": "Templates/ISG/packer_uploads",
+    "disk_mode": "thick",
+    "disk_size": "76800",
+    "memsize": "4096",
+    "numvcpus": "2",
+    "mdt_share_unc_path": "\\\\den2w3mdtsa01.dvakeyqa.corp\\deploymentshare$"
+}

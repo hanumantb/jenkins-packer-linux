@@ -1,0 +1,66 @@
+{
+    "builders": [{
+        "type": "vmware-iso",
+        "vm_name": "{{ user `name` }}",
+        "iso_url": "{{ user `iso_url` }}",
+        "iso_checksum": "{{ user `iso_checksum` }}",
+        "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+        "output_directory": "{{ user `output_dir` }}/output-{{ user `name` }}-base/",
+        "communicator": "winrm",
+        "winrm_username": "vagrant",
+        "winrm_password": "vagrant",
+        "winrm_timeout": "12h",
+        "winrm_port": "5985",
+        "vnc_port_min": 5900,
+        "vnc_port_max": 5980,
+        "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+        "shutdown_timeout": "15m",
+        "headless": "false",
+        "guest_os_type": "{{ user `guest_os_type` }}",
+        "disk_size": "{{ user `disk_size` }}",
+        "floppy_files": [
+            "answer_files/2016/Autounattend.xml",
+            "scripts/Set-WinRM.ps1",
+            "scripts/Install-Net35.ps1",
+            "scripts/Install-Nuget.ps1",
+            "scripts/Install-VMwareTools.ps1",
+            "scripts/Invoke-Defrag.ps1",
+            "scripts/Reset-EmptySpace.ps1",
+            "drivers/pvscsi/"
+        ],
+        "vmx_data": {
+            "memsize": "{{ user `memsize` }}",
+            "numvcpus": "{{ user `numvcpus` }}",
+            "scsi0.virtualDev": "pvscsi",
+            "RemoteDisplay.vnc.enabled": "false",
+            "RemoteDisplay.vnc.port": "5900"
+        }
+    }],
+    "provisioners": [{
+            "type": "powershell",
+            "elevated_user": "vagrant",
+            "elevated_password": "vagrant",
+            "scripts": [
+                "scripts/Disable-UAC.ps1",
+                "scripts/Install-Net35.ps1"
+            ]
+        },
+        {
+            "type": "windows-restart"
+        },
+        {
+            "type": "powershell",
+            "scripts": [
+                "scripts/Install-Nuget.ps1",
+                "scripts/Get-DeployScripts.ps1"
+            ]
+        }
+    ],
+    "variables": {
+        "name": "2016",
+        "guest_os_type": "windows8srv-64",
+        "iso_checksum": "36B60C31CAFA2D488FE5D842D1FFBA623381F5E9F70E9359B3AA05282C9D232D",
+        "iso_url": "D:/ISO/SW_DVD9_Win_Svr_STD_Core_and_DataCtr_Core_2016_64Bit_English_-3_MLF_X21-30350.ISO",
+        "iso_checksum_type": "sha256"
+    }
+}

@@ -9,7 +9,7 @@ for(int i = 0; i < OS.size(); i++) {
     def index = i
     def osString = OS[index]
     buildOSJobs["Build OS ${OS.getAt(index)}"] = {
-        build job: 'packer-linux-BaseOS', parameters: [
+        build job: 'packer-BaseOS', parameters: [
         string(name: 'OSVersion', value: osString)]
     }
 }
@@ -84,7 +84,7 @@ def getLastJobStatus(osVersion, task) {
 }
 
 pipeline {
-    agent { label 'packer-node' }
+    agent { label 'packer' }
     environment {
         // Packer directories
         packer_build_directory = "D:/PackerBuilds/"

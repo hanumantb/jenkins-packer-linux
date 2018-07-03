@@ -1,0 +1,86 @@
+{
+    "builders": [{
+        "type": "vmware-iso",
+        "vm_name": "{{ user `name` }}",
+        "iso_url": "{{ user `iso_url` }}",
+        "iso_checksum": "{{ user `iso_checksum` }}",
+        "iso_checksum_type": "{{ user `iso_checksum_type` }}",
+        "output_directory": "{{ user `output_dir` }}/output-{{ user `name` }}-base/",
+        "communicator": "winrm",
+        "winrm_username": "vagrant",
+        "winrm_password": "vagrant",
+        "winrm_timeout": "12h",
+        "winrm_port": "5985",
+        "vnc_port_min": 5900,
+        "vnc_port_max": 5980,
+        "shutdown_command": "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\"",
+        "shutdown_timeout": "15m",
+        "headless": "false",
+        "guest_os_type": "{{ user `guest_os_type` }}",
+        "disk_size": "{{ user `disk_size` }}",
+        "floppy_files": [
+            "answer_files/2008_r2/Autounattend.xml",
+            "scripts/Set-WinRM.ps1",
+            "scripts/Start-Shutdown.bat",
+            "scripts/Install-WMF5.ps1",
+            "scripts/Install-WMF4.ps1",
+            "scripts/Install-Net461.ps1",
+            "scripts/Install-Net35.ps1",
+            "scripts/Install-Nuget.ps1",
+            "scripts/Install-VMwareTools.ps1",
+            "scripts/Set-WMF5SysPrepRegFix.ps1",
+            "scripts/Invoke-Defrag.ps1",
+            "scripts/Reset-EmptySpace.ps1",
+            "scripts/Set-SanPolicy.ps1",
+            "drivers/pvscsi/"
+        ],
+        "vmx_data": {
+            "memsize": "{{ user `memsize` }}",
+            "numvcpus": "{{ user `numvcpus` }}",
+            "scsi0.virtualDev": "pvscsi",
+            "RemoteDisplay.vnc.enabled": "false",
+            "RemoteDisplay.vnc.port": "5900"
+        }
+    }],
+    "provisioners": [{
+            "type": "powershell",
+            "elevated_user": "vagrant",
+            "elevated_password": "vagrant",
+            "scripts": [
+                "scripts/Install-Net461.ps1",
+                "scripts/Disable-UAC.ps1",
+                "scripts/Install-WMF4.ps1"
+            ]
+        },
+        {
+            "type": "windows-restart"
+        },
+        {
+            "type": "powershell",
+            "elevated_user": "vagrant",
+            "elevated_password": "vagrant",
+            "scripts": [
+                "scripts/Install-WMF5.ps1"
+            ]
+        },
+        {
+            "type": "windows-restart"
+        },
+        {
+            "type": "powershell",
+            "scripts": [
+                "scripts/Install-Nuget.ps1",
+                "scripts/Get-DeployScripts.ps1",
+                "scripts/Set-WMF5SysPrepRegFix.ps1",
+                "scripts/Set-SanPolicy.ps1"
+            ]
+        }
+    ],
+    "variables": {
+        "name": "2008R2",
+        "guest_os_type": "windows7srv-64",
+        "iso_checksum": "7E7E9425041B3328CCF723A0855C2BC4F462EC57",
+        "iso_url": "D:/ISO/SW_DVD5_Windows_Svr_DC_EE_SE_Web_2008_R2_64Bit_English_w_SP1_MLF_X17-22580.ISO",
+        "iso_checksum_type": "sha1"
+    }
+}
