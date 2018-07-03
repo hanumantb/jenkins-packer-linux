@@ -84,7 +84,7 @@ def getLastJobStatus(osVersion, task) {
 }
 
 pipeline {
-    agent { label 'packer' }
+    agent { label 'packer-node' }
     environment {
         // Packer directories
         packer_build_directory = "D:/PackerBuilds/"
